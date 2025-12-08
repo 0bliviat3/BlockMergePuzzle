@@ -1,0 +1,96 @@
+# --- Unity 기본 ---
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Mm]emoryCaptures/
+
+# 빌드 플랫폼별
+/[Bb]undle/
+sysinfo.txt
+
+# --- Unity 자동 생성 메타/캐시 ---
+/UserSettings/
+/ProjectSettings/TimelineSettings.asset
+/[Aa]ssets/AssetStoreTools*
+
+# --- 주소 지정 시스템(AssetBundle 관련) ---
+/Assets/StreamingAssets/aa/*
+!/Assets/StreamingAssets/aa/Android
+!/Assets/StreamingAssets/aa/iOS
+
+# --- Visual Studio / Rider ---
+/.vscode/
+/.vs/
+/.idea/
+/*.csproj
+/*.sln
+/*.suo
+/*.user
+/*.unityproj
+/*.tmp
+/*.pidb
+/*.mdb
+/*.opendb
+/*.VC.db
+*.DotSettings.user
+
+# --- OS/에디터 파일 ---
+.DS_Store
+Thumbs.db
+
+# --- Crash Reports ---
+/sysinfo.txt
+
+# --- Unity Cloud / Collaborate ---
+/[Uu]serSettings/*
+
+# --- TextMeshPro ---
+/Assets/TextMesh Pro/Resources/FontInfo_*.asset
+/Assets/TextMesh Pro/Resources/SpriteInfo_*.asset
+
+# --- Addressables Cache ---
+/Library/com.unity.addressables
+
+# --- Gradle/Android ---
+/.gradle/
+/*.gradle
+/exportedObj/
+/.gradle/
+/local.properties
+*.apk
+*.aab
+
+# --- iOS XCode ---
+/iOSBuild/
+/build/ios/
+/build/iOS/
+/build/iphone/
+/build/*/LaunchScreen.storyboard
+*.xcodeproj/*
+*.xcworkspace/*
+
+# --- Keystore ---
+*.keystore
+*.jks
+
+# --- 기타 캐시 ---
+/[Oo]bj/
+/[Bb]in/
+/ExportedObj/
+*.svd
+
+# --- Unity Collaborate (옛 버전) ---
+/.collab/
+
+# --- 플러그인 임시 파일 ---
+/Assets/Plugins/*/Editor/*.meta
+/Assets/Plugins/*/Editor/*
+
+# --- Rider ---
+/.idea/
+
+# --- ShaderCache ---
+/Library/ShaderCache
