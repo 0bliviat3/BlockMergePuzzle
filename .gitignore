@@ -1,96 +1,75 @@
-# --- Unity 기본 ---
+# Unity용 .gitignore — 자동 생성 파일과 캐시를 무시합니다.
+# 권장: `Library/`, `Temp/`, `Obj/` 등 빌드/에디터 캐시는 버전관리에서 제외하세요.
+
+# =============== Unity Generated ===============
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
-/[Mm]emoryCaptures/
 
-# 빌드 플랫폼별
-/[Bb]undle/
-sysinfo.txt
+# Asset Serialization / Addressable caches
+/Library/ShaderCache/
+/Library/com.unity.addressables/
 
-# --- Unity 자동 생성 메타/캐시 ---
-/UserSettings/
-/ProjectSettings/TimelineSettings.asset
-/[Aa]ssets/AssetStoreTools*
-
-# --- 주소 지정 시스템(AssetBundle 관련) ---
-/Assets/StreamingAssets/aa/*
-!/Assets/StreamingAssets/aa/Android
-!/Assets/StreamingAssets/aa/iOS
-
-# --- Visual Studio / Rider ---
-/.vscode/
-/.vs/
-/.idea/
-/*.csproj
-/*.sln
-/*.suo
-/*.user
-/*.unityproj
-/*.tmp
-/*.pidb
-/*.mdb
-/*.opendb
-/*.VC.db
-*.DotSettings.user
-
-# --- OS/에디터 파일 ---
+# Crash reports, system files
+/sysinfo.txt
 .DS_Store
 Thumbs.db
 
-# --- Crash Reports ---
-/sysinfo.txt
+# ================= IDEs =================
+/.vscode/
+/.vs/
+/.idea/
+*.sln
+*.csproj
+*.unityproj
+*.user
+*.suo
+*.tmp
+*.pidb
+*.mdb
+*.opendb
+*.VC.db
+*.DotSettings.user
 
-# --- Unity Cloud / Collaborate ---
-/[Uu]serSettings/*
-
-# --- TextMeshPro ---
-/Assets/TextMesh Pro/Resources/FontInfo_*.asset
-/Assets/TextMesh Pro/Resources/SpriteInfo_*.asset
-
-# --- Addressables Cache ---
-/Library/com.unity.addressables
-
-# --- Gradle/Android ---
-/.gradle/
-/*.gradle
-/exportedObj/
-/.gradle/
-/local.properties
+# ================= Build =================
 *.apk
 *.aab
+*.unitypackage
+/exportedObj/
+*.app
 
-# --- iOS XCode ---
+# ================ OS X / iOS ================
+*.xcodeproj
+*.xcworkspace
 /iOSBuild/
 /build/ios/
 /build/iOS/
-/build/iphone/
-/build/*/LaunchScreen.storyboard
-*.xcodeproj/*
-*.xcworkspace/*
 
-# --- Keystore ---
+# ================ Android ================
+/gradle/
+/.gradle/
+local.properties
+
+# ================ Keystore ================
 *.keystore
 *.jks
 
-# --- 기타 캐시 ---
-/[Oo]bj/
-/[Bb]in/
-/ExportedObj/
-*.svd
-
-# --- Unity Collaborate (옛 버전) ---
-/.collab/
-
-# --- 플러그인 임시 파일 ---
-/Assets/Plugins/*/Editor/*.meta
+# ================ Plugins/Editor temp ================
 /Assets/Plugins/*/Editor/*
+/Assets/Plugins/*/Editor/*.meta
 
-# --- Rider ---
-/.idea/
+# ================ TextMesh Pro ================
+/Assets/TextMesh Pro/Resources/FontInfo_*.asset
+/Assets/TextMesh Pro/Resources/SpriteInfo_*.asset
 
-# --- ShaderCache ---
-/Library/ShaderCache
+# ================ User Settings / Generated Assets ================
+/UserSettings/
+
+# Note: `ProjectSettings/`와 `Assets/`는 일반적으로 커밋합니다.
+# 필요에 따라 특정 파일을 제외하려면 아래에 추가하세요.
+
+# Example: ignore a single timeline file
+/ProjectSettings/TimelineSettings.asset
