@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 랜덤 블록 레벨 결정 (난이도 상향)
     /// </summary>
-    private int GetRandomBlockLevel()
+    public int GetRandomBlockLevel()  // private → public (폭발 후 빈 칸 채우기에 사용)
     {
         float random = Random.Range(0f, 100f);
         
@@ -296,7 +296,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 즉시 게임 오버 체크 (개선된 방식) ⭐
     /// </summary>
-    private void CheckGameOverImmediate()
+    public void CheckGameOverImmediate()  // private → public (폭발 후에도 호출 가능)
     {
         if (blockMerger == null || grid == null)
         {

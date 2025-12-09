@@ -253,6 +253,8 @@ public class BlockMerger : MonoBehaviour
         List<Block> affectedBlocks = GetBlocksInRadius(centerPos, explodeRadius);
         Debug.Log($"영향받은 블록 수: {affectedBlocks.Count}");
         
+        int removedBlockCount = 1; // 중심 블록
+        
         foreach (Block affectedBlock in affectedBlocks)
         {
             if (affectedBlock.level <= 3)
@@ -267,6 +269,7 @@ public class BlockMerger : MonoBehaviour
                     scoreManager.AddScore(affectedBlock.GetBlockValue());
                 }
                 
+                removedBlockCount++; // 제거된 블록 수 카운트
                 Debug.Log($"낮은 레벨 블록 제거: {affectedBlock.gridPosition}");
             }
             else
@@ -287,7 +290,34 @@ public class BlockMerger : MonoBehaviour
         }
         
         yield return new WaitForSeconds(0.3f);
-        Debug.Log("=== 폭발 완료 ===");
+        
+        // ⭐ 폭발 후 빈 칸 채우기 (중요!)
+        Debug.Log($"💡 폭발로 {removedBlockCount}개 블록 제거됨 → 새 블록으로 채우기 시작");
+        
+        if (GameManager.Instance != null)
+        {
+            for (int i = 0; i < removedBlockCount; i++)
+            {
+                int level = GameManager.Instance.GetRandomBlockLevel();
+                Block newBlock = grid.AddRandomBlock(level);
+                
+                if (newBlock != null)
+                {
+                    Debug.Log($"✓ 빈 칸 채움 {i + 1}/{removedBlockCount} - 위치: {newBlock.gridPosition}, 레벨: {level}");
+                    yield return new WaitForSeconds(0.1f); // 시각적 효과
+                }
+                else
+                {
+                    Debug.LogWarning($"⚠️ 빈 칸 채우기 실패 {i + 1}/{removedBlockCount} - 더 이상 빈 칸이 없음");
+                    break;
+                }
+            }
+            
+            // 빈 칸을 채운 후 게임오버 체크
+            GameManager.Instance.CheckGameOverImmediate();
+        }
+        
+        Debug.Log("=== 폭발 + 빈 칸 채우기 완료 ===");
     }
     
     private List<Block> GetBlocksInRadius(Vector2Int center, int radius)
