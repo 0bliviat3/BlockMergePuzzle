@@ -9,7 +9,6 @@ public class SettingsManager : MonoBehaviour
 {
     [Header("UI 참조")]
     public GameObject settingsPanel;
-    public Button settingsButton;
     public Button closeButton;
     public Button quitButton;
     public Slider bgmSlider;
@@ -19,6 +18,16 @@ public class SettingsManager : MonoBehaviour
     
     [Header("자동 생성 설정")]
     public bool autoCreateUI = true;
+
+    public static SettingsManager Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
     
     private void Start()
     {
@@ -47,39 +56,6 @@ public class SettingsManager : MonoBehaviour
             Debug.LogError("Canvas를 찾을 수 없습니다!");
             return;
         }
-        
-        // ===== 설정 버튼 (우상단) =====
-        GameObject settingsButtonObj = new GameObject("SettingsButton");
-        settingsButtonObj.transform.SetParent(canvas.transform, false);
-        
-        RectTransform settingsButtonRect = settingsButtonObj.AddComponent<RectTransform>();
-        settingsButtonRect.anchorMin = new Vector2(1f, 1f);
-        settingsButtonRect.anchorMax = new Vector2(1f, 1f);
-        settingsButtonRect.pivot = new Vector2(1f, 1f);
-        settingsButtonRect.anchoredPosition = new Vector2(-20, -20);
-        settingsButtonRect.sizeDelta = new Vector2(100, 100);
-        
-        Image settingsButtonImage = settingsButtonObj.AddComponent<Image>();
-        settingsButtonImage.color = new Color(0.2f, 0.2f, 0.2f, 0.9f);
-        
-        Button settingsButtonComp = settingsButtonObj.AddComponent<Button>();
-        settingsButton = settingsButtonComp;
-        
-        // 설정 버튼 텍스트 (간단하게 "SET"만)
-        GameObject textObj = new GameObject("Text");
-        textObj.transform.SetParent(settingsButtonObj.transform, false);
-        
-        TextMeshProUGUI textComp = textObj.AddComponent<TextMeshProUGUI>();
-        textComp.text = "SET";
-        textComp.fontSize = 32;
-        textComp.fontStyle = FontStyles.Bold;
-        textComp.alignment = TextAlignmentOptions.Center;
-        textComp.color = Color.white;
-        
-        RectTransform textRect = textObj.GetComponent<RectTransform>();
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.sizeDelta = Vector2.zero;
         
         // ===== 설정 패널 (팝업) =====
         GameObject panelObj = new GameObject("SettingsPanel");
@@ -287,10 +263,6 @@ public class SettingsManager : MonoBehaviour
         }
         
         // 버튼 리스너
-        if (settingsButton != null)
-        {
-            settingsButton.onClick.AddListener(OpenSettings);
-        }
         
         if (closeButton != null)
         {

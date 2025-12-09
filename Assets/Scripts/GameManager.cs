@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI movesText;
     
     private int moveCount = 0;
+    private GameObject mainMenuButton; // 메인 메뉴 버튼 참조
     
     private void Awake()
     {
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("=== GameManager Start 시작 ===");
         Initialize();
+        CreateMainMenuButton();
     }
     
     /// <summary>
@@ -447,5 +449,82 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         Debug.Log("게임 재개");
+    }
+    
+    /// <summary>
+    /// 메인 메뉴 이동 버튼 생성
+    /// </summary>
+    private void CreateMainMenuButton()
+    {
+        // Canvas 찾기
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogWarning("Canvas를 찾을 수 없어 메인 메뉴 버튼을 생성하지 못했습니다.");
+            return;
+        }
+        
+        // 버튼 생성
+        GameObject buttonObj = new GameObject("MainMenuButton");
+        buttonObj.transform.SetParent(canvas.transform, false);
+        
+        Image buttonImage = buttonObj.AddComponent<Image>();
+        buttonImage.color = new Color(0.2f, 0.3f, 0.4f); // 어두운 파란색
+        
+        Button button = buttonObj.AddComponent<Button>();
+        button.onClick.AddListener(() => BackToMainMenu());
+        
+        RectTransform rect = buttonObj.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(1, 1);
+        rect.anchorMax = new Vector2(1, 1);
+        rect.sizeDelta = new Vector2(150, 80);
+        rect.anchoredPosition = new Vector2(-100, -75); // 우측상단 (Classic2048과 동일)
+        
+        // 텍스트
+        GameObject textObj = new GameObject("Text");
+        textObj.transform.SetParent(buttonObj.transform, false);
+        
+        Text text = textObj.AddComponent<Text>();
+        text.text = "← MENU";
+        text.fontSize = 32;
+        text.fontStyle = FontStyle.Bold;
+        text.alignment = TextAnchor.MiddleCenter;
+        text.color = Color.white;
+        text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        
+        RectTransform textRect = textObj.GetComponent<RectTransform>();
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.sizeDelta = Vector2.zero;
+        
+        // 버튼 참조 저장
+        mainMenuButton = buttonObj;
+        
+        Debug.Log("✓ 메인 메뉴 버튼 생성 완료");
+    }
+    
+    /// <summary>
+    /// 메인 메뉴로 이동
+    /// </summary>
+    private void BackToMainMenu()
+    {
+        Debug.Log("메인 메뉴로 이동");
+        Time.timeScale = 1f; // 시간 정상화
+        
+        // 메인 메뉴 버튼 삭제
+        if (mainMenuButton != null)
+        {
+            Destroy(mainMenuButton);
+            Debug.Log("✓ 메인 메뉴 버튼 삭제");
+        }
+        
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene("MainMenu");
+        }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        }
     }
 }
