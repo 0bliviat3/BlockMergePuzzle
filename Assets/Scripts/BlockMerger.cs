@@ -197,6 +197,17 @@ public class BlockMerger : MonoBehaviour
             }
             else
             {
+                // ⭐ 병합 사운드 재생
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayMergeSound();
+                    Debug.Log("🔊 병합 사운드 재생 요청");
+                }
+                else
+                {
+                    Debug.LogWarning("⚠️ AudioManager.Instance가 null입니다!");
+                }
+                
                 // 병합 효과
                 if (effectManager != null)
                 {
@@ -228,6 +239,13 @@ public class BlockMerger : MonoBehaviour
         Debug.Log($"=== 블록 폭발: {block.gridPosition}, 레벨 {block.level} ===");
         
         Vector2Int centerPos = block.gridPosition;
+        
+        // ⭐ 폭발 사운드 재생
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayExplodeSound();
+            Debug.Log("💥 폭발 사운드 재생 요청");
+        }
         
         if (effectManager != null)
         {

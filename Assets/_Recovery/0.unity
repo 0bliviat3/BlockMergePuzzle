@@ -1216,10 +1216,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   bgmSource: {fileID: 0}
   sfxSource: {fileID: 0}
-  bgmClip: {fileID: 0}
-  mergeSound: {fileID: 0}
-  explodeSound: {fileID: 0}
+  bgmClip: {fileID: 8300000, guid: 7ccd1f0154fcf8247b4c559a268f4a2e, type: 3}
+  mergeSound: {fileID: 8300000, guid: 9337d7966352be84183bdcdb99c2be10, type: 3}
+  explodeSound: {fileID: 8300000, guid: 2a1dbde00f318644c9ceb9c50dfdbaca, type: 3}
   gameOverSound: {fileID: 0}
+  comboSound: {fileID: 8300000, guid: ebe0ebaa1c848694a9a77b975b9ec919, type: 3}
+  clickSound: {fileID: 8300000, guid: 472a48f5842bcff48a96d7387eeca63a, type: 3}
   bgmVolume: 0.5
   sfxVolume: 0.7
 --- !u!4 &1584992761

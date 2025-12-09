@@ -134,6 +134,12 @@ public class ScoreManager : MonoBehaviour
         comboTimer = comboTimeLimit;
         Debug.Log($"🔥 콤보 추가: x{comboCount} (다음 병합 점수 {(1 + comboCount * comboMultiplier) * 100}%)");
         
+        // ⭐ 콤보 사운드 재생
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayComboSound();
+        }
+        
         UpdateComboUI();
         ShowComboMessage();
         

@@ -16,6 +16,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip mergeSound;
     public AudioClip explodeSound;
     public AudioClip gameOverSound;
+    public AudioClip comboSound;        // ⭐ 추가
+    public AudioClip clickSound;        // ⭐ 추가
     
     [Header("설정")]
     [Range(0f, 1f)]
@@ -102,14 +104,24 @@ public class AudioManager : MonoBehaviour
     }
     
     /// <summary>
-    /// SFX 재생
+    /// SFX 재생 (디버그 로그 포함)
     /// </summary>
     public void PlaySFX(AudioClip clip)
     {
-        if (sfxSource != null && clip != null)
+        if (sfxSource == null)
         {
-            sfxSource.PlayOneShot(clip);
+            Debug.LogError("❌ SFX Source가 null입니다!");
+            return;
         }
+        
+        if (clip == null)
+        {
+            Debug.LogWarning("⚠️ AudioClip이 null입니다! 사운드를 재생할 수 없습니다.");
+            return;
+        }
+        
+        sfxSource.PlayOneShot(clip, sfxVolume);
+        Debug.Log($"🔊 SFX 재생: {clip.name} (볼륨: {sfxVolume * 100}%)");
     }
     
     /// <summary>
@@ -117,7 +129,14 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayMergeSound()
     {
-        PlaySFX(mergeSound);
+        if (mergeSound != null)
+        {
+            PlaySFX(mergeSound);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Merge Sound가 연결되지 않았습니다!");
+        }
     }
     
     /// <summary>
@@ -125,7 +144,14 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayExplodeSound()
     {
-        PlaySFX(explodeSound);
+        if (explodeSound != null)
+        {
+            PlaySFX(explodeSound);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Explode Sound가 연결되지 않았습니다!");
+        }
     }
     
     /// <summary>
@@ -133,7 +159,44 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayGameOverSound()
     {
-        PlaySFX(gameOverSound);
+        if (gameOverSound != null)
+        {
+            PlaySFX(gameOverSound);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Game Over Sound가 연결되지 않았습니다!");
+        }
+    }
+    
+    /// <summary>
+    /// 콤보 사운드 재생 ⭐
+    /// </summary>
+    public void PlayComboSound()
+    {
+        if (comboSound != null)
+        {
+            PlaySFX(comboSound);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Combo Sound가 연결되지 않았습니다!");
+        }
+    }
+    
+    /// <summary>
+    /// 클릭 사운드 재생 ⭐
+    /// </summary>
+    public void PlayClickSound()
+    {
+        if (clickSound != null)
+        {
+            PlaySFX(clickSound);
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Click Sound가 연결되지 않았습니다!");
+        }
     }
     
     /// <summary>

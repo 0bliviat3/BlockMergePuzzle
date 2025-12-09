@@ -337,6 +337,12 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void OpenSettings()
     {
+        // ⭐ 클릭 사운드 재생
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayClickSound();
+        }
+        
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(true);
@@ -350,6 +356,12 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void CloseSettings()
     {
+        // ⭐ 클릭 사운드 재생
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayClickSound();
+        }
+        
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
@@ -363,6 +375,12 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
+        // ⭐ 클릭 사운드 재생
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayClickSound();
+        }
+        
         Debug.Log("🚪 게임 종료");
         
         #if UNITY_EDITOR
