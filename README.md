@@ -222,8 +222,7 @@ The grid movement uses a **line-based processing** approach:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/2048-collection.git
-cd 2048-collection
+git clone https://github.com/0bliviat3/BlockMergePuzzle.git
 ```
 
 2. Open in Unity:
@@ -408,25 +407,11 @@ Contributions are welcome! Please follow these guidelines:
 
 This project is licensed under the MIT License - see LICENSE file for details.
 
-## 👤 Author
-
-**Wan**
-- Enterprise software developer
-- Specializes in: Java/Spring, Android, Unity
-- Focus: AI automation, game development
-
-## 🙏 Acknowledgments
-
-- Unity Technologies for the game engine
-- LeanTween for smooth animations
-- 2048 original game by Gabriele Cirulli
-- Claude AI for development assistance
-
 ## 📞 Support
 
 For issues, questions, or suggestions:
 - Open an issue on GitHub
-- Contact: [your-email@example.com]
+- Contact: [sjo9810@gmail.com]
 
 ---
 
