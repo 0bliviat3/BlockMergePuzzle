@@ -1,303 +1,435 @@
-# Block Merge Puzzle - Unity 모바일 게임
+# 2048 Collection
 
-## 📱 게임 개요
-2048 스타일의 블록 병합 퍼즐 게임으로, 연쇄 반응과 폭발 메커니즘이 추가되어 더욱 전략적이고 중독성 있는 게임플레이를 제공합니다.
+A mobile-optimized multi-game collection featuring two addictive puzzle games built with Unity.
 
-## 🎮 게임 특징
+![Unity Version](https://img.shields.io/badge/Unity-2022.3+-blue)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success)
 
-### 핵심 메커니즘
-1. **블록 병합**: 같은 레벨의 인접한 블록 2개를 터치하여 병합
-2. **레벨 업**: 병합 시 한 단계 높은 블록으로 진화 (2 → 4 → 8 → 16 → ...)
-3. **폭발 시스템**: 레벨 10 이상 블록 생성 시 폭발하여 주변 블록에 영향
-4. **콤보 시스템**: 연속 병합으로 점수 배율 증가
-5. **전략적 플레이**: 그리드 관리와 블록 배치가 중요
+## 🎮 Games
 
-### 게임 목표
-- 🏆 최고 점수 달성
-- 💎 최대 레벨 블록 생성
-- 🔥 연쇄 폭발로 보너스 점수 획득
-- ⏱️ 그리드가 가득 차기 전까지 최대한 생존
+### 1. Block Merge Puzzle
+A strategic block-merging game where you combine numbered blocks to reach higher scores.
 
-## 🛠️ 기술 스택
-- **Unity 2021.3 LTS** (이상 권장)
-- **C# 스크립트**
-- **TextMeshPro** (UI)
-- **LeanTween** (애니메이션)
-- **2D Physics**
+**Features:**
+- Grid-based gameplay with physics-based block dropping
+- Explosive merge effects with particle systems
+- Progressive difficulty scaling
+- Chain combo system with score multipliers
+- Game over detection with replay option
 
-## 📦 프로젝트 구조
+**How to Play:**
+- Tap to drop blocks onto the grid
+- Merge blocks with the same number
+- Create chains for bonus points
+- Survive as long as possible
 
+### 2. Classic 2048
+The timeless 2048 game with infinite play mode and mobile-optimized controls.
+
+**Features:**
+- Smooth swipe controls
+- Infinite play mode (no 2048 win limit)
+- Best score tracking with local storage
+- Responsive grid layout (1.5x larger tiles for mobile)
+- Complete animation system with LeanTween
+
+**How to Play:**
+- Swipe in any direction to move tiles
+- Combine matching numbers to create larger tiles
+- Reach 2048, 4096, 8192, and beyond!
+- Beat your high score
+
+## 🏗️ Architecture
+
+### Multi-Game Structure
 ```
-BlockMergePuzzle/
-├── Assets/
-│   ├── Scripts/
-│   │   ├── Block.cs              # 개별 블록 클래스
-│   │   ├── Grid.cs               # 그리드 관리
-│   │   ├── BlockMerger.cs        # 병합 로직
-│   │   ├── GameManager.cs        # 게임 전체 관리
-│   │   ├── ScoreManager.cs       # 점수 및 콤보 관리
-│   │   ├── InputHandler.cs       # 터치/입력 처리
-│   │   └── EffectManager.cs      # 이펙트 관리
-│   ├── Scenes/
-│   ├── Prefabs/
-│   ├── Materials/
-│   ├── Sprites/
-│   └── Audio/
-└── README.md
-```
-
-## 🎯 주요 클래스 설명
-
-### Block.cs
-- 개별 블록의 데이터와 동작 관리
-- 레벨, 색상, 애니메이션 처리
-- 병합, 폭발, 이동 애니메이션
-
-### Grid.cs
-- 5x5 그리드 관리
-- 블록 추가/제거/이동
-- 빈 공간 및 인접 블록 검색
-
-### BlockMerger.cs
-- 블록 선택 및 병합 로직
-- 폭발 메커니즘 (레벨 10 이상)
-- 주변 블록 영향 처리
-- 연쇄 병합 감지
-
-### GameManager.cs
-- 게임 흐름 제어
-- 게임 시작/종료/재시작
-- 게임 오버 조건 체크
-- 최고 블록 레벨 추적
-
-### ScoreManager.cs
-- 점수 계산 및 표시
-- 콤보 시스템 관리
-- 최고 점수 저장/로드
-
-### InputHandler.cs
-- 터치/마우스 입력 처리
-- 블록 선택 감지
-- UI 이벤트 필터링
-
-### EffectManager.cs
-- 병합/폭발 이펙트
-- 사운드 재생
-- 화면 효과 (흔들림, 플래시)
-
-## 🚀 Unity 설정 가이드
-
-### 1. 프로젝트 생성
-1. Unity Hub에서 "New Project" 클릭
-2. Template: **2D (URP)** 선택
-3. Project Name: `BlockMergePuzzle`
-4. Location: 이 폴더의 상위 디렉토리 선택
-
-### 2. 필수 패키지 설치
-**Package Manager**에서 다음 패키지 설치:
-- TextMeshPro (필수)
-- 2D Sprite (포함됨)
-- Unity UI (포함됨)
-
-### 3. LeanTween 설치
-1. [LeanTween GitHub](https://github.com/dentedpixel/LeanTween) 방문
-2. `LeanTween.cs` 다운로드
-3. `Assets/Scripts/` 폴더에 추가
-
-### 4. 프리팹 생성
-
-#### Block Prefab
-1. UI → Image 생성
-2. TextMeshPro Text 자식으로 추가
-3. BoxCollider2D 컴포넌트 추가
-4. Block.cs 스크립트 추가
-5. Prefab으로 저장
-
-#### Cell Prefab
-1. UI → Image 생성
-2. 배경 색상: 회색 반투명
-3. Prefab으로 저장
-
-### 5. 씬 구성
-
-```
-Canvas (Screen Space - Overlay)
-├── GridContainer (Empty GameObject)
-├── BlocksContainer (Empty GameObject)
-├── UI
-│   ├── ScoreText (TextMeshPro)
-│   ├── HighScoreText (TextMeshPro)
-│   ├── HighestBlockText (TextMeshPro)
-│   ├── ComboPanel
-│   │   └── ComboText (TextMeshPro)
-│   └── GameOverPanel
-│       ├── GameOverText (TextMeshPro)
-│       └── RestartButton (Button)
-└── GameManager (Empty GameObject)
-    ├── Grid Component
-    ├── BlockMerger Component
-    ├── GameManager Component
-    ├── ScoreManager Component
-    ├── EffectManager Component
-    └── InputHandler Component
+2048 Collection/
+├── MainMenu          # Game launcher with navigation
+├── BlockMergePuzzle  # Main puzzle game
+└── Classic2048       # Classic 2048 game
 ```
 
-### 6. Layer 설정
-1. Edit → Project Settings → Tags and Layers
-2. Layer 추가: `BlockLayer`
-3. Block 프리팹의 Layer를 `BlockLayer`로 설정
+### Key Systems
 
-### 7. 빌드 설정 (Android)
+#### Scene Management
+- **SceneLoader**: Smooth fade transitions between scenes
+- **DontDestroyOnLoad**: Persistent audio and scene loader
+- Automatic canvas cleanup on scene transitions
 
-#### Player Settings
-```
-Company Name: YourCompany
-Product Name: Block Merge Puzzle
-Package Name: com.yourcompany.blockmerge
-Version: 1.0.0
-```
+#### Audio System
+- **AudioManager**: Singleton audio controller
+- BGM (Background Music) with seamless looping
+- SFX (Sound Effects) for clicks, merges, and explosions
+- Volume controls and mute functionality
 
-#### Resolution and Presentation
-```
-Default Orientation: Portrait
-Allowed Orientations: Portrait만 체크
-```
+#### Grid System
+- **Grid**: Dynamic grid with configurable size and spacing
+- **BlockMerger**: Handles merge logic and chain detection
+- **Classic2048Grid**: Complete rewrite with proper state management
 
-#### Other Settings
-```
-Scripting Backend: IL2CPP
-Target Architectures: ARM64 체크
-Minimum API Level: Android 5.0 (API level 21)
-Target API Level: Automatic (highest installed)
-```
+#### UI System
+- Automatic UI generation with code
+- No scene-based UI setup required
+- Consistent styling across all scenes
+- Mobile-optimized button sizes and positioning
 
-### 8. 최적화 설정
+## 📱 Mobile Optimization
 
-#### Quality Settings
-```
-Anti Aliasing: 2x Multi Sampling
-VSync Count: Don't Sync
-```
+### Touch Controls
+- Swipe detection with configurable sensitivity
+- Touch-to-place for block merging
+- No keyboard input (mobile-only)
 
-#### Graphics Settings
-```
-Use URP Asset
-Enable SRP Batcher
-```
+### Visual Optimization
+- Large, readable fonts (LegacyRuntime.ttf)
+- 210x210 tile size for comfortable viewing
+- High-contrast colors for visibility
+- Responsive layouts that adapt to screen size
 
-## 🎨 커스터마이징 가이드
+### Performance
+- Object pooling for particles
+- Efficient grid state management
+- Optimized animation using LeanTween
+- Minimal memory footprint
 
-### 블록 색상 변경
-`Block.cs`의 `levelColors` 배열 수정:
+## 🎨 Design Patterns
+
+### Singleton Pattern
 ```csharp
-private static readonly Color[] levelColors = new Color[]
-{
-    new Color(0.93f, 0.89f, 0.85f), // 레벨 1 색상
-    // ... 원하는 색상으로 변경
-};
+// Used for global managers
+- AudioManager
+- SceneLoader
+- GameManager
+- Classic2048Manager
 ```
 
-### 그리드 크기 변경
-`Grid.cs`의 Inspector에서:
-- Grid Size: 4 (4x4) 또는 6 (6x6)
-- Cell Size: 블록 크기 조정
-- Cell Spacing: 블록 간격 조정
+### Component Pattern
+```csharp
+// Modular game components
+- Grid (data structure)
+- BlockMerger (game logic)
+- EffectManager (visual effects)
+- ScoreManager (scoring system)
+```
 
-### 폭발 레벨 조정
-`BlockMerger.cs`의 Inspector에서:
-- Explode Level: 폭발 발동 레벨 (기본: 10)
-- Explode Radius: 폭발 범위 (기본: 1)
+### State Management
+```csharp
+// Clean state handling
+- isGameOver flag
+- isProcessingMove lock
+- Grid array synchronization
+```
 
-### 점수 배율 조정
-`ScoreManager.cs`의 Inspector에서:
-- Combo Time Limit: 콤보 지속 시간
-- Combo Multiplier: 콤보 점수 배율
+## 🔧 Technical Details
 
-## 🐛 트러블슈팅
+### Core Technologies
+- **Unity 2022.3+**
+- **C# .NET Standard 2.1**
+- **LeanTween** for animations
+- **TextMesh Pro** fallback to Legacy UI Text
 
-### 블록이 클릭되지 않음
-- Block 프리팹에 BoxCollider2D가 있는지 확인
-- InputHandler의 Block Layer 설정 확인
-- EventSystem이 씬에 있는지 확인
+### Key Scripts
 
-### 애니메이션이 작동하지 않음
-- LeanTween.cs가 프로젝트에 포함되어 있는지 확인
-- 스크립트 컴파일 에러가 없는지 확인
+#### Shared Components
+```
+/Assets/Scripts/Shared/
+├── AudioManager.cs      # Global audio controller
+├── SceneLoader.cs       # Scene transition manager
+└── GameConfig.cs        # Game settings and constants
+```
 
-### UI 텍스트가 표시되지 않음
-- TextMeshPro 패키지 설치 확인
-- TMP 폰트 에셋이 있는지 확인
+#### Block Merge Puzzle
+```
+/Assets/Scripts/
+├── GameManager.cs       # Main game controller
+├── Grid.cs              # Grid data structure
+├── Block.cs             # Individual block logic
+├── BlockMerger.cs       # Merge detection and logic
+├── ScoreManager.cs      # Score tracking and display
+├── EffectManager.cs     # Particle effects
+└── InputHandler.cs      # Touch input processing
+```
 
-### 모바일에서 터치가 안됨
-- Input System이 Legacy로 설정되어 있는지 확인
-- Canvas의 Render Mode가 Screen Space - Overlay인지 확인
+#### Classic 2048
+```
+/Assets/Scripts/Classic2048/
+├── Classic2048Manager.cs   # Game controller with auto UI
+├── Classic2048Grid.cs      # Complete grid rewrite
+├── Classic2048Tile.cs      # Tile behavior and animation
+└── Classic2048Input.cs     # Swipe detection
+```
 
-## 📱 빌드 및 배포
+#### Main Menu
+```
+/Assets/Scripts/MainMenu/
+└── MainMenuManager.cs      # Menu UI and navigation
+```
 
-### Android APK 빌드
-1. File → Build Settings
-2. Platform: Android 선택
-3. Switch Platform 클릭
-4. Add Open Scenes 클릭
-5. Player Settings 설정 (위 참조)
-6. Build 또는 Build And Run
+### Grid Algorithm (Classic 2048)
 
-### iOS 빌드
-1. File → Build Settings
-2. Platform: iOS 선택
-3. Switch Platform 클릭
-4. Build 클릭
-5. Xcode에서 프로젝트 열기
-6. Signing & Capabilities 설정
-7. 디바이스에 빌드
+The grid movement uses a **line-based processing** approach:
 
-## 🎮 게임플레이 팁
+```csharp
+// Process each row/column independently
+1. Collect tiles in movement direction
+2. Merge adjacent matching tiles
+3. Reposition merged result
+4. Update grid state synchronously
+```
 
-### 초보자 전략
-1. 낮은 레벨 블록을 먼저 병합
-2. 한 쪽 구석에 높은 레벨 블록 모으기
-3. 빈 공간을 최대한 많이 확보
+**Key Improvements:**
+- No diagonal movement bugs
+- No tile overlap issues
+- Instant state updates
+- Clean separation of logic
 
-### 고급 전략
-1. 연쇄 병합 계획하기
-2. 폭발 타이밍 조절
-3. 콤보 시스템 활용
-4. 그리드 전체를 균형있게 관리
+## 🎯 Game Features
 
-### 고득점 노하우
-- 🔥 연속 병합으로 콤보 유지
-- 💥 계획된 폭발로 공간 확보
-- 🎯 높은 레벨 블록 집중 생성
-- ⚡ 빠른 판단과 실행
+### Block Merge Puzzle
+- ✅ Physics-based block dropping
+- ✅ Explosive merge effects
+- ✅ Combo chain detection
+- ✅ Progressive difficulty
+- ✅ Score multipliers
+- ✅ Game over detection
+- ✅ Replay functionality
 
-## 📝 향후 개선 사항
+### Classic 2048
+- ✅ Infinite play mode
+- ✅ Smooth swipe controls
+- ✅ Best score persistence
+- ✅ No win limit (play beyond 2048)
+- ✅ Proper merge logic
+- ✅ Animation system
+- ✅ Mobile-optimized layout
 
-### 단기 목표
-- [ ] 파티클 이펙트 추가
-- [ ] 사운드 효과 강화
-- [ ] 튜토리얼 추가
-- [ ] 다양한 스킨/테마
+### Shared Features
+- ✅ BGM and SFX
+- ✅ Scene transitions with fade
+- ✅ Back to menu button
+- ✅ Consistent UI styling
+- ✅ Auto-generated interfaces
 
-### 중기 목표
-- [ ] 일일 도전 과제
-- [ ] 리더보드 (Google Play Games)
-- [ ] 업적 시스템
-- [ ] 아이템/부스터
+## 🚀 Getting Started
 
-### 장기 목표
-- [ ] 멀티플레이어 모드
-- [ ] 토너먼트 시스템
-- [ ] 계절별 이벤트
-- [ ] 캐릭터/스토리 모드
+### Prerequisites
+- Unity 2022.3 or later
+- LeanTween package
+- Android Build Support / iOS Build Support
 
-## 📄 라이선스
-MIT License - 자유롭게 사용, 수정, 배포 가능
+### Installation
 
-## 👥 기여
-이슈나 개선 제안은 언제든 환영합니다!
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/2048-collection.git
+cd 2048-collection
+```
 
-## 📧 문의
-개발 관련 문의나 피드백은 이슈 트래커를 이용해주세요.
+2. Open in Unity:
+   - Launch Unity Hub
+   - Click "Add" → Select project folder
+   - Open project
+
+3. Build Settings:
+   - File → Build Settings
+   - Switch Platform to Android/iOS
+   - Add all scenes:
+     - MainMenu
+     - BlockMergePuzzle (SampleScene)
+     - Classic2048
+
+### Running the Game
+
+1. **In Editor:**
+   - Open `MainMenu` scene
+   - Press Play button
+   - Navigate to desired game
+
+2. **On Device:**
+   - File → Build Settings → Build
+   - Install APK/IPA on device
+   - Launch and play
+
+## 📖 Development Guide
+
+### Adding a New Game
+
+1. **Create Scene:**
+```csharp
+// Create new scene in Scenes folder
+Assets/Scenes/NewGame.unity
+```
+
+2. **Create Manager:**
+```csharp
+public class NewGameManager : MonoBehaviour
+{
+    public static NewGameManager Instance { get; private set; }
+    
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+    
+    // Game logic here
+}
+```
+
+3. **Add to MainMenu:**
+```csharp
+// In MainMenuManager.cs
+private void CreateGameButton(string title, string sceneName)
+{
+    // Button creation code
+}
+```
+
+### Modifying Grid Size
+
+**Block Merge Puzzle:**
+```csharp
+// In Grid.cs
+public int width = 6;  // Change grid width
+public int height = 10; // Change grid height
+```
+
+**Classic 2048:**
+```csharp
+// In Classic2048Grid.cs
+public int gridSize = 4;    // Default: 4x4
+public float cellSize = 210f; // Tile size
+```
+
+### Adjusting Difficulty
+
+**Block Merge Puzzle:**
+```csharp
+// In GameManager.cs
+private float spawnDelay = 1.5f;     // Time between spawns
+private int maxBlockValue = 64;      // Highest number
+private float difficultyIncrease = 0.95f; // Speed multiplier
+```
+
+### Custom Animations
+
+Using LeanTween for smooth animations:
+```csharp
+// Scale animation
+LeanTween.scale(gameObject, Vector3.one * 1.2f, 0.2f)
+    .setEase(LeanTweenType.easeOutQuad);
+
+// Move animation
+LeanTween.move(rectTransform, targetPosition, 0.15f)
+    .setEase(LeanTweenType.easeOutQuad);
+
+// Always cancel previous animations
+LeanTween.cancel(gameObject);
+```
+
+## 🐛 Known Issues & Solutions
+
+### Issue: Black Rectangle on Scene Transition
+**Cause:** Canvas not properly cleaned up  
+**Solution:** Implemented in `SceneLoader.cs` with canvas cleanup and `OnDestroy()` methods
+
+### Issue: Tiles Moving Diagonally
+**Cause:** Grid state and visual position desync  
+**Solution:** Complete grid rewrite with synchronous state updates
+
+### Issue: Blocks Overlapping
+**Cause:** Animation conflicts  
+**Solution:** Proper `LeanTween.cancel()` before new animations
+
+### Issue: Score Not Displaying
+**Cause:** `ref` parameter not working with Text components  
+**Solution:** Return Text component directly from creation method
+
+## 📊 Performance Metrics
+
+### Target Performance
+- **FPS:** 60fps on mid-range devices
+- **Memory:** < 200MB RAM usage
+- **Load Time:** < 1 second scene transitions
+- **Responsiveness:** < 16ms input latency
+
+### Optimization Techniques
+- Object pooling for particles
+- Efficient grid state management
+- Minimal garbage collection
+- Optimized animation curves
+
+## 🎨 Asset Credits
+
+### Fonts
+- **LegacyRuntime.ttf** - Unity built-in font
+
+### Audio
+- BGM tracks (add credits)
+- SFX samples (add credits)
+
+### Visual Design
+- All UI generated programmatically
+- Color scheme: 2048-inspired palette
+
+## 📝 Version History
+
+### v1.0.0 (Current)
+- ✅ Complete multi-game architecture
+- ✅ Block Merge Puzzle with combos
+- ✅ Classic 2048 infinite mode
+- ✅ Mobile optimization (1.5x larger tiles)
+- ✅ Audio system with BGM/SFX
+- ✅ Scene transition system
+- ✅ Auto-generated UI
+- ✅ Bug fixes: diagonal movement, overlapping, black rectangle
+
+### Development Highlights
+- Complete Classic2048Grid rewrite
+- Line-based merge algorithm
+- Synchronous grid state management
+- Canvas cleanup on scene transitions
+- Mobile-optimized tile sizing
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit with clear messages
+4. Test thoroughly on device
+5. Submit pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see LICENSE file for details.
+
+## 👤 Author
+
+**Wan**
+- Enterprise software developer
+- Specializes in: Java/Spring, Android, Unity
+- Focus: AI automation, game development
+
+## 🙏 Acknowledgments
+
+- Unity Technologies for the game engine
+- LeanTween for smooth animations
+- 2048 original game by Gabriele Cirulli
+- Claude AI for development assistance
+
+## 📞 Support
+
+For issues, questions, or suggestions:
+- Open an issue on GitHub
+- Contact: [your-email@example.com]
 
 ---
-**Enjoy the game! 🎮**
+
+**Built with ❤️ using Unity**
+
+*Last Updated: December 2025*
