@@ -97,13 +97,13 @@ public class Classic2048Tile : MonoBehaviour
         // 텍스트 색상 (밝은 타일은 어두운 텍스트, 어두운 타일은 밝은 텍스트)
         valueText.color = value <= 4 ? new Color(0.47f, 0.43f, 0.40f) : Color.white;
         
-        // 폰트 크기
+        // 폰트 크기 (타일 크기 증가에 맞춰 조정)
         if (value < 100)
-            valueText.fontSize = 72;
+            valueText.fontSize = 95; // 72 → 95
         else if (value < 1000)
-            valueText.fontSize = 60;
+            valueText.fontSize = 78; // 60 → 78
         else
-            valueText.fontSize = 48;
+            valueText.fontSize = 62; // 48 → 62
     }
     
     /// <summary>

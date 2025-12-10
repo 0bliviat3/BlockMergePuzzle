@@ -9,7 +9,7 @@ public class Classic2048Grid : MonoBehaviour
 {
     [Header("그리드 설정")]
     public int gridSize = 4;
-    public float cellSize = 140f;
+    public float cellSize = 210f; // 140f → 210f (1.5배 증가)
     public float cellSpacing = 15f;
     
     [Header("타일 프리팹")]

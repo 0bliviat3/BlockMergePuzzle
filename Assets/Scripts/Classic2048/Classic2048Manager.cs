@@ -225,12 +225,12 @@ public class Classic2048Manager : MonoBehaviour
         RectTransform gridRect = gridObj.GetComponent<RectTransform>();
         gridRect.anchorMin = new Vector2(0.5f, 0.5f);
         gridRect.anchorMax = new Vector2(0.5f, 0.5f);
-        gridRect.sizeDelta = new Vector2(650, 650);
+        gridRect.sizeDelta = new Vector2(975, 975); // 650 → 975 (1.5배)
         gridRect.anchoredPosition = new Vector2(0, -50);
         
         grid = gridObj.AddComponent<Classic2048Grid>();
         grid.gridSize = 4;
-        grid.cellSize = 140f;
+        grid.cellSize = 210f; // 140f → 210f
         grid.cellSpacing = 15f;
         
         // 셀 배경 생성
@@ -245,13 +245,13 @@ public class Classic2048Manager : MonoBehaviour
                 cellImage.color = new Color(0.80f, 0.76f, 0.71f, 0.35f);
                 
                 RectTransform cellRect = cellObj.GetComponent<RectTransform>();
-                cellRect.sizeDelta = new Vector2(140f, 140f);
+                cellRect.sizeDelta = new Vector2(210f, 210f); // 140f → 210f
                 
-                float totalSize = 4 * 140f + 3 * 15f;
-                float startX = -totalSize / 2f + 140f / 2f;
-                float startY = -totalSize / 2f + 140f / 2f;
-                float posX = startX + x * (140f + 15f);
-                float posY = startY + y * (140f + 15f);
+                float totalSize = 4 * 210f + 3 * 15f; // 140f → 210f
+                float startX = -totalSize / 2f + 210f / 2f; // 140f → 210f
+                float startY = -totalSize / 2f + 210f / 2f; // 140f → 210f
+                float posX = startX + x * (210f + 15f); // 140f → 210f
+                float posY = startY + y * (210f + 15f); // 140f → 210f
                 
                 cellRect.anchoredPosition = new Vector2(posX, posY);
             }
