@@ -51,11 +51,20 @@ public class Block : MonoBehaviour
             if (blockImage != null)
             {
                 Debug.Log($"Block {name}: blockImage 자동 찾기 성공");
+                // ⭐ CRITICAL: Raycast Target 활성화
+                blockImage.raycastTarget = true;
+                Debug.Log($"Block {name}: raycastTarget 활성화됨");
             }
             else
             {
                 Debug.LogError($"Block {name}: Image 컴포넌트를 찾을 수 없습니다!");
             }
+        }
+        else
+        {
+            // 이미 할당된 경우에도 raycastTarget 활성화
+            blockImage.raycastTarget = true;
+            Debug.Log($"Block {name}: 기존 blockImage의 raycastTarget 활성화됨");
         }
         
         if (levelText == null)
@@ -69,17 +78,6 @@ public class Block : MonoBehaviour
             {
                 Debug.LogError($"Block {name}: TextMeshProUGUI를 찾을 수 없습니다!");
             }
-        }
-        
-        // BoxCollider2D 확인
-        BoxCollider2D collider = GetComponent<BoxCollider2D>();
-        if (collider == null)
-        {
-            Debug.LogError($"Block {name}: BoxCollider2D가 없습니다! 터치가 작동하지 않을 수 있습니다.");
-        }
-        else
-        {
-            Debug.Log($"Block {name}: BoxCollider2D 확인 완료");
         }
     }
     

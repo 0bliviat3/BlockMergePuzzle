@@ -18,26 +18,68 @@ public class InputHandler : MonoBehaviour
     {
         Debug.Log("=== InputHandler Start ===");
         
-        // GraphicRaycaster 찾기
-        Canvas canvas = FindObjectOfType<Canvas>();
+        // 모든 Canvas 찾기
+        Canvas[] allCanvases = FindObjectsOfType<Canvas>();
+        Debug.Log($"씬에 있는 Canvas 개수: {allCanvases.Length}");
+        
+        Canvas canvas = null;
+        foreach (Canvas c in allCanvases)
+        {
+            Debug.Log($"Canvas 발견: {c.name}");
+            Debug.Log($"  - Render Mode: {c.renderMode}");
+            Debug.Log($"  - Sort Order: {c.sortingOrder}");
+            
+            GraphicRaycaster gr = c.GetComponent<GraphicRaycaster>();
+            Debug.Log($"  - GraphicRaycaster: {(gr != null ? "있음" : "없음")}");
+            
+            // GameCanvas 또는 첫 번째 Canvas 사용
+            if (c.name == "Canvas" || c.name.Contains("Game"))
+            {
+                canvas = c;
+                Debug.Log($"  ✓ 이 Canvas를 사용합니다: {c.name}");
+            }
+        }
+        
+        // Canvas가 없으면 첫 번째 것 사용
+        if (canvas == null && allCanvases.Length > 0)
+        {
+            canvas = allCanvases[0];
+            Debug.Log($"기본 Canvas 사용: {canvas.name}");
+        }
+        
         if (canvas != null)
         {
             graphicRaycaster = canvas.GetComponent<GraphicRaycaster>();
             if (graphicRaycaster == null)
             {
-                Debug.LogError("Canvas에 GraphicRaycaster가 없습니다!");
+                Debug.LogWarning("Canvas에 GraphicRaycaster가 없습니다! 자동으로 추가합니다.");
+                graphicRaycaster = canvas.gameObject.AddComponent<GraphicRaycaster>();
+                Debug.Log("✓ GraphicRaycaster 추가됨");
             }
             else
             {
                 Debug.Log("✓ GraphicRaycaster 찾음");
             }
+            
+            // GraphicRaycaster 설정 확인
+            Debug.Log($"GraphicRaycaster 설정:");
+            Debug.Log($"  - Ignore Reversed Graphics: {graphicRaycaster.ignoreReversedGraphics}");
+            Debug.Log($"  - Blocking Objects: {graphicRaycaster.blockingObjects}");
+        }
+        else
+        {
+            Debug.LogError("Canvas를 찾을 수 없습니다!");
         }
         
         // EventSystem 찾기
         eventSystem = FindObjectOfType<EventSystem>();
         if (eventSystem == null)
         {
-            Debug.LogError("EventSystem이 없습니다!");
+            Debug.LogWarning("EventSystem이 없습니다! 자동으로 생성합니다.");
+            GameObject eventSystemObj = new GameObject("EventSystem");
+            eventSystem = eventSystemObj.AddComponent<EventSystem>();
+            eventSystemObj.AddComponent<StandaloneInputModule>();
+            Debug.Log("✓ EventSystem 생성됨");
         }
         else
         {
@@ -130,12 +172,23 @@ public class InputHandler : MonoBehaviour
         {
             Debug.Log($"- 히트: {result.gameObject.name}, Layer: {LayerMask.LayerToName(result.gameObject.layer)}");
             
+            // Image 컴포넌트 확인
+            Image img = result.gameObject.GetComponent<Image>();
+            if (img != null)
+            {
+                Debug.Log($"  → Image 발견, raycastTarget: {img.raycastTarget}");
+            }
+            
             // Block 컴포넌트 찾기
             Block block = result.gameObject.GetComponent<Block>();
             if (block != null)
             {
-                Debug.Log($"✓ Block 컴포넌트 찾음!");
+                Debug.Log($"✓ Block 컴포넌트 찾음! 레벨: {block.level}");
                 return block;
+            }
+            else
+            {
+                Debug.Log($"  → Block 컴포넌트 없음");
             }
         }
         

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 /// <summary>
 /// 게임 그리드 관리 클래스 - 수정 버전 (로그 강화)
@@ -90,8 +91,69 @@ public class Grid : MonoBehaviour
             return;
         }
         
+        // Canvas 계층 구조 확인
+        CheckCanvasHierarchy();
+        
         CreateGrid();
         Debug.Log("=== Grid Initialize 완료 ===");
+    }
+    
+    /// <summary>
+    /// Canvas 계층 구조 확인
+    /// </summary>
+    private void CheckCanvasHierarchy()
+    {
+        Debug.Log("=== Canvas 계층 구조 확인 ===");
+        
+        // gridContainer의 Canvas 찾기
+        Canvas gridCanvas = gridContainer.GetComponentInParent<Canvas>();
+        if (gridCanvas != null)
+        {
+            Debug.Log($"✓ gridContainer의 Canvas: {gridCanvas.name}");
+            Debug.Log($"  - Render Mode: {gridCanvas.renderMode}");
+            Debug.Log($"  - Sort Order: {gridCanvas.sortingOrder}");
+        }
+        else
+        {
+            Debug.LogError("❌ gridContainer가 Canvas의 자식이 아닙니다!");
+        }
+        
+        // blocksContainer의 Canvas 찾기
+        Canvas blocksCanvas = blocksContainer.GetComponentInParent<Canvas>();
+        if (blocksCanvas != null)
+        {
+            Debug.Log($"✓ blocksContainer의 Canvas: {blocksCanvas.name}");
+            Debug.Log($"  - Render Mode: {blocksCanvas.renderMode}");
+            Debug.Log($"  - Sort Order: {blocksCanvas.sortingOrder}");
+            
+            // GraphicRaycaster 확인
+            GraphicRaycaster raycaster = blocksCanvas.GetComponent<GraphicRaycaster>();
+            if (raycaster != null)
+            {
+                Debug.Log($"✓ Canvas에 GraphicRaycaster 있음");
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ Canvas에 GraphicRaycaster가 없습니다!");
+            }
+        }
+        else
+        {
+            Debug.LogError("❌ blocksContainer가 Canvas의 자식이 아닙니다!");
+        }
+        
+        // 같은 Canvas인지 확인
+        if (gridCanvas != null && blocksCanvas != null)
+        {
+            if (gridCanvas == blocksCanvas)
+            {
+                Debug.Log("✓ gridContainer와 blocksContainer가 같은 Canvas 안에 있음");
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ gridContainer와 blocksContainer가 다른 Canvas에 있습니다!");
+            }
+        }
     }
     
     /// <summary>
@@ -184,6 +246,18 @@ public class Grid : MonoBehaviour
             GameObject blockObj = Instantiate(blockPrefab, blocksContainer);
             Debug.Log($"✓ 블록 오브젝트 생성: {blockObj.name}");
             
+            // 블록의 Canvas 확인
+            Canvas blockCanvas = blockObj.GetComponentInParent<Canvas>();
+            if (blockCanvas != null)
+            {
+                Debug.Log($"✓ 생성된 블록의 Canvas: {blockCanvas.name}");
+            }
+            else
+            {
+                Debug.LogError($"❌ 생성된 블록이 Canvas 안에 없습니다!");
+                Debug.LogError($"   Parent: {blockObj.transform.parent?.name}");
+            }
+            
             Block block = blockObj.GetComponent<Block>();
             if (block == null)
             {
@@ -197,6 +271,13 @@ public class Grid : MonoBehaviour
             blockRect.sizeDelta = new Vector2(cellSize, cellSize);
             blockRect.anchoredPosition = GetCellPosition(position.x, position.y);
             Debug.Log($"블록 위치 설정: {blockRect.anchoredPosition}");
+            
+            // Image raycastTarget 확인
+            UnityEngine.UI.Image img = blockObj.GetComponent<UnityEngine.UI.Image>();
+            if (img != null)
+            {
+                Debug.Log($"블록 Image raycastTarget: {img.raycastTarget}");
+            }
             
             // 블록 초기화
             block.Initialize(level, position);
