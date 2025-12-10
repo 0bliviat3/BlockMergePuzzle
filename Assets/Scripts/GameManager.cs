@@ -68,6 +68,15 @@ public class GameManager : MonoBehaviour
         CreateMainMenuButton();
     }
     
+    private void OnDestroy()
+    {
+        // 씬 전환 시 메인 메뉴 버튼 제거
+        if (mainMenuButton != null)
+        {
+            Destroy(mainMenuButton);
+        }
+    }
+    
     /// <summary>
     /// 필수 참조 체크
     /// </summary>

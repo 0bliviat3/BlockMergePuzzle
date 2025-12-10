@@ -61,6 +61,15 @@ public class Classic2048Manager : MonoBehaviour
         StartGame();
     }
     
+    private void OnDestroy()
+    {
+        // 씬 전환 시 Canvas 명시적 삭제
+        if (canvas != null)
+        {
+            Destroy(canvas.gameObject);
+        }
+    }
+    
     private void CreateCompleteGameUI()
     {
         // EventSystem이 없으면 생성

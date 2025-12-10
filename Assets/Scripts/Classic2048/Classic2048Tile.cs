@@ -166,8 +166,12 @@ public class Classic2048Tile : MonoBehaviour
     {
         if (rectTransform == null) return;
         
-        // 이전 애니메이션 취소 (rectTransform 기준)
+        // 모든 이전 애니메이션 즉시 취소
         LeanTween.cancel(rectTransform.gameObject);
+        LeanTween.cancel(gameObject);
+        
+        // 강제로 현재 애니메이션 정지
+        rectTransform.anchoredPosition = rectTransform.anchoredPosition;
         
         // 새로운 애니메이션 시작
         LeanTween.move(rectTransform, targetPosition, duration)

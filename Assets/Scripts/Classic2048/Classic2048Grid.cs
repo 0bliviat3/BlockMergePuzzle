@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// 2048 그리드 관리 클래스
+/// 2048 그리드 관리 클래스 - 완전히 재작성된 버전
 /// </summary>
 public class Classic2048Grid : MonoBehaviour
 {
@@ -124,65 +124,93 @@ public class Classic2048Grid : MonoBehaviour
     }
     
     /// <summary>
-    /// 타일 이동
+    /// 타일 이동 - 완전히 재작성
     /// </summary>
     public bool MoveTiles(Vector2Int direction)
     {
         bool moved = false;
         
-        // 병합 플래그 초기화
+        // 1단계: 병합 플래그 초기화
         foreach (var tile in allTiles)
         {
             if (tile != null)
                 tile.hasMerged = false;
         }
         
-        // 이동 순서 결정
+        // 2단계: 방향별 처리
         if (direction == Vector2Int.up)
         {
-            // 위로 이동: 아래부터 위로
-            for (int x = 0; x < gridSize; x++)
-            {
-                for (int y = gridSize - 2; y >= 0; y--)
-                {
-                    if (MoveTile(new Vector2Int(x, y), direction))
-                        moved = true;
-                }
-            }
+            moved = ProcessVertical(true);
         }
         else if (direction == Vector2Int.down)
         {
-            // 아래로 이동: 위부터 아래로
-            for (int x = 0; x < gridSize; x++)
-            {
-                for (int y = 1; y < gridSize; y++)
-                {
-                    if (MoveTile(new Vector2Int(x, y), direction))
-                        moved = true;
-                }
-            }
+            moved = ProcessVertical(false);
         }
         else if (direction == Vector2Int.left)
         {
-            // 왼쪽 이동: 왼쪽부터 오른쪽으로
-            for (int y = 0; y < gridSize; y++)
-            {
-                for (int x = 1; x < gridSize; x++)
-                {
-                    if (MoveTile(new Vector2Int(x, y), direction))
-                        moved = true;
-                }
-            }
+            moved = ProcessHorizontal(true);
         }
         else if (direction == Vector2Int.right)
         {
-            // 오른쪽 이동: 오른쪽부터 왼쪽으로
-            for (int y = 0; y < gridSize; y++)
+            moved = ProcessHorizontal(false);
+        }
+        
+        return moved;
+    }
+    
+    /// <summary>
+    /// 수직 이동 처리 (위/아래)
+    /// </summary>
+    private bool ProcessVertical(bool isUp)
+    {
+        bool moved = false;
+        
+        for (int x = 0; x < gridSize; x++)
+        {
+            // 타일 수집
+            List<Classic2048Tile> column = new List<Classic2048Tile>();
+            
+            if (isUp)
             {
-                for (int x = gridSize - 2; x >= 0; x--)
+                for (int y = gridSize - 1; y >= 0; y--)
                 {
-                    if (MoveTile(new Vector2Int(x, y), direction))
+                    if (tiles[x, y] != null)
+                        column.Add(tiles[x, y]);
+                }
+            }
+            else
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (tiles[x, y] != null)
+                        column.Add(tiles[x, y]);
+                }
+            }
+            
+            // 병합 처리
+            List<Classic2048Tile> merged = MergeList(column);
+            
+            // 새 위치에 배치
+            for (int i = 0; i < gridSize; i++)
+            {
+                int y = isUp ? (gridSize - 1 - i) : i;
+                
+                if (i < merged.Count)
+                {
+                    Classic2048Tile tile = merged[i];
+                    if (tile.gridPosition.x != x || tile.gridPosition.y != y)
+                    {
+                        // 위치 변경됨
+                        tiles[tile.gridPosition.x, tile.gridPosition.y] = null;
+                        tiles[x, y] = tile;
+                        tile.gridPosition = new Vector2Int(x, y);
+                        tile.MoveTo(GetWorldPosition(new Vector2Int(x, y)));
                         moved = true;
+                    }
+                }
+                else
+                {
+                    tiles[x, y] = null;
                 }
             }
         }
@@ -191,89 +219,115 @@ public class Classic2048Grid : MonoBehaviour
     }
     
     /// <summary>
-    /// 개별 타일 이동
+    /// 수평 이동 처리 (좌/우)
     /// </summary>
-    private bool MoveTile(Vector2Int from, Vector2Int direction)
+    private bool ProcessHorizontal(bool isLeft)
     {
-        if (tiles[from.x, from.y] == null)
-            return false;
+        bool moved = false;
         
-        Classic2048Tile tile = tiles[from.x, from.y];
-        Vector2Int targetPos = from;
-        
-        // 가장 먼 위치 찾기
-        while (true)
+        for (int y = 0; y < gridSize; y++)
         {
-            Vector2Int nextPos = targetPos + direction;
+            // 타일 수집
+            List<Classic2048Tile> row = new List<Classic2048Tile>();
             
-            if (nextPos.x < 0 || nextPos.x >= gridSize || 
-                nextPos.y < 0 || nextPos.y >= gridSize)
-                break;
-            
-            Classic2048Tile targetTile = tiles[nextPos.x, nextPos.y];
-            
-            if (targetTile == null)
+            if (isLeft)
             {
-                targetPos = nextPos;
-            }
-            else if (targetTile.value == tile.value && !targetTile.hasMerged && !tile.hasMerged)
-            {
-                // 병합 가능 - 즉시 그리드 상태 업데이트
-                tiles[from.x, from.y] = null;
-                MergeTiles(tile, targetTile, nextPos);
-                return true;
+                for (int x = 0; x < gridSize; x++)
+                {
+                    if (tiles[x, y] != null)
+                        row.Add(tiles[x, y]);
+                }
             }
             else
             {
-                break;
+                for (int x = gridSize - 1; x >= 0; x--)
+                {
+                    if (tiles[x, y] != null)
+                        row.Add(tiles[x, y]);
+                }
+            }
+            
+            // 병합 처리
+            List<Classic2048Tile> merged = MergeList(row);
+            
+            // 새 위치에 배치
+            for (int i = 0; i < gridSize; i++)
+            {
+                int x = isLeft ? i : (gridSize - 1 - i);
+                
+                if (i < merged.Count)
+                {
+                    Classic2048Tile tile = merged[i];
+                    if (tile.gridPosition.x != x || tile.gridPosition.y != y)
+                    {
+                        // 위치 변경됨
+                        tiles[tile.gridPosition.x, tile.gridPosition.y] = null;
+                        tiles[x, y] = tile;
+                        tile.gridPosition = new Vector2Int(x, y);
+                        tile.MoveTo(GetWorldPosition(new Vector2Int(x, y)));
+                        moved = true;
+                    }
+                }
+                else
+                {
+                    tiles[x, y] = null;
+                }
             }
         }
         
-        // 이동
-        if (targetPos != from)
-        {
-            tiles[from.x, from.y] = null;
-            tiles[targetPos.x, targetPos.y] = tile;
-            tile.gridPosition = targetPos;
-            tile.MoveTo(GetWorldPosition(targetPos));
-            return true;
-        }
-        
-        return false;
+        return moved;
     }
     
     /// <summary>
-    /// 타일 병합
+    /// 타일 리스트 병합 처리
     /// </summary>
-    private void MergeTiles(Classic2048Tile movingTile, Classic2048Tile targetTile, Vector2Int targetPos)
+    private List<Classic2048Tile> MergeList(List<Classic2048Tile> tiles)
     {
-        // 이동 타일 제거
-        tiles[movingTile.gridPosition.x, movingTile.gridPosition.y] = null;
-        allTiles.Remove(movingTile);
+        List<Classic2048Tile> result = new List<Classic2048Tile>();
         
-        // 애니메이션 후 제거
-        movingTile.MoveTo(GetWorldPosition(targetPos));
-        Destroy(movingTile.gameObject, 0.15f);
-        
-        // 타겟 타일 값 증가
-        int newValue = targetTile.value * 2;
-        targetTile.SetValue(newValue);
-        targetTile.hasMerged = true;
-        targetTile.PlayMergeAnimation();
-        
-        // 점수 추가
-        if (Classic2048Manager.Instance != null)
+        for (int i = 0; i < tiles.Count; i++)
         {
-            Classic2048Manager.Instance.AddScore(newValue);
+            if (i + 1 < tiles.Count && 
+                tiles[i].value == tiles[i + 1].value && 
+                !tiles[i].hasMerged)
+            {
+                // 병합
+                Classic2048Tile keepTile = tiles[i];
+                Classic2048Tile removeTile = tiles[i + 1];
+                
+                int newValue = keepTile.value * 2;
+                keepTile.SetValue(newValue);
+                keepTile.hasMerged = true;
+                keepTile.PlayMergeAnimation();
+                
+                // 점수 추가
+                if (Classic2048Manager.Instance != null)
+                {
+                    Classic2048Manager.Instance.AddScore(newValue);
+                }
+                
+                // 병합 사운드
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayMergeSound();
+                }
+                
+                // 제거할 타일 즉시 삭제
+                allTiles.Remove(removeTile);
+                Destroy(removeTile.gameObject);
+                
+                Debug.Log($"🔀 병합: {newValue / 2} + {newValue / 2} = {newValue}");
+                
+                result.Add(keepTile);
+                i++; // 다음 타일 건너뛰기
+            }
+            else
+            {
+                result.Add(tiles[i]);
+            }
         }
         
-        // 병합 사운드
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayMergeSound();
-        }
-        
-        Debug.Log($"🔀 병합: {targetTile.value / 2} + {targetTile.value / 2} = {targetTile.value}");
+        return result;
     }
     
     /// <summary>
