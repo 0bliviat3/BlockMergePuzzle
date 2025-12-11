@@ -353,13 +353,89 @@ public class SettingsManager : MonoBehaviour
             AudioManager.Instance.PlayClickSound();
         }
         
-        Debug.Log("🚪 게임 종료");
+        Debug.Log("🚪 게임 종료 시작...");
         
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        // Time.timeScale 복원
+        Time.timeScale = 1f;
+        
+        // DontDestroyOnLoad 오브젝트 정리
+        CleanupDontDestroyOnLoad();
+        
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        Debug.Log("🤖 Android 앱 종료 시작");
+        
+        // Android에서 완전 종료
+        using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+            
+            // 현재 Activity와 모든 상위 Activity 종료
+            activity.Call("finishAffinity");
+            
+            // 안전한 지연 후 프로세스 종료
+            StartCoroutine(DelayedAndroidQuit());
+        }
+        #elif UNITY_IOS && !UNITY_EDITOR
+        Debug.Log("🍎 iOS는 앱 종료를 지원하지 않습니다");
+        // iOS는 앱 종료를 권장하지 않음
+        Application.Quit();
         #else
+        Debug.Log("💻 Editor/Standalone 종료");
         Application.Quit();
         #endif
+    }
+    
+    /// <summary>
+    /// DontDestroyOnLoad 오브젝트 정리
+    /// </summary>
+    private void CleanupDontDestroyOnLoad()
+    {
+        Debug.Log("🧹 DontDestroyOnLoad 오브젝트 정리 중...");
+        
+        // AudioManager 정리
+        if (AudioManager.Instance != null)
+        {
+            Debug.Log("  → AudioManager 제거");
+            Destroy(AudioManager.Instance.gameObject);
+        }
+        
+        // SceneLoader 정리
+        if (SceneLoader.Instance != null)
+        {
+            Debug.Log("  → SceneLoader 제거");
+            Destroy(SceneLoader.Instance.gameObject);
+        }
+        
+        // SettingsManager 자신도 정리
+        Debug.Log("  → SettingsManager 제거");
+        
+        Debug.Log("✓ DontDestroyOnLoad 오브젝트 정리 완료");
+    }
+    
+    /// <summary>
+    /// Android 앱 지연 종료
+    /// </summary>
+    private System.Collections.IEnumerator DelayedAndroidQuit()
+    {
+        Debug.Log("⏱️ Android 종료 대기 중... (0.5초)");
+        
+        // 사운드 재생 및 정리 시간 확보
+        yield return new WaitForSecondsRealtime(0.5f);
+        
+        Debug.Log("🔚 Android 앱 종료");
+        
+        // Unity의 정상 종료 (Android에서 Activity와 함께 종료됨)
+        Application.Quit();
+        
+        // 만약 Application.Quit()이 작동하지 않으면 (극히 드물음)
+        yield return new WaitForSecondsRealtime(1f);
+        
+        // Android Native 강제 종료 (최후의 수단)
+        using (var process = new AndroidJavaClass("android.os.Process"))
+        {
+            int pid = process.CallStatic<int>("myPid");
+            process.CallStatic("killProcess", pid);
+        }
     }
     
     /// <summary>
